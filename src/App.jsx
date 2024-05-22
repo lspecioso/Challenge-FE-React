@@ -24,7 +24,7 @@ const transportOptions = {
   },
 };
 
-// Formatear opciones de transporte utilizando Object.entries
+// Formatea opciones de transporte utilizando Object.entries y reduce como hablamos
 const transportOptionsFormatted = {
   data: Object.entries(transportOptions.data).reduce((acc, [key, value]) => {
     const type = transportOptions.transportType[key];
@@ -61,8 +61,7 @@ function App() {
           <option value="">Selecciona un transporte</option>
           {transportOptionsFormatted.keys.map((key) => (
             <option key={key} value={key}>
-              {transportOptionsFormatted.data[key].description} -{" "}
-              {transportOptionsFormatted.data[key].type} {/* Include type here */}
+               {`${transportOptionsFormatted.data[key].description} - ${transportOptionsFormatted.data[key].type}`}
             </option>
           ))}
         </select>
