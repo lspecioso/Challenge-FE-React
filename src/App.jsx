@@ -23,39 +23,66 @@ const transportOptions = {
     yacht: "maritime",
   },
 };
-/** 1 */
-const transportOptionsFormatted = {};
+
+// Formatear opciones de transporte utilizando Object.entries
+const transportOptionsFormatted = {
+  data: Object.entries(transportOptions.data).reduce((acc, [key, value]) => {
+    const type = transportOptions.transportType[key];
+    return { ...acc, [key]: { ...value, type } };
+  }, {}),
+  keys: Object.keys(transportOptions.data),
+  transportType: new Set(
+    Object.values(transportOptions.transportType).map((type) =>
+      type.toUpperCase()
+    )
+  ),
+};
 
 function App() {
   const [selectedOption, setSelectedOption] = useState(null);
 
   const handleChange = (event) => {
-    /** 3 */
+    setSelectedOption(event.target.value);
+  };
+
+  const handleClear = () => {
+    setSelectedOption(null);
   };
 
   return (
     <div className="App">
       <p>
-        Tipos de medio de transporte:
-        {/* 2- <span></span> */}
+        Tipos de medio de transporte:{" "}
+        <span>{[...transportOptionsFormatted.transportType].join(" - ")}</span>
       </p>
       <div className="select-container">
         <label>Selecciona un medio de transporte</label>
         <select value={selectedOption} onChange={handleChange}>
-          <option value="opcion1">Opción 1</option>
-          <option value="opcion2">Opción 2</option>
-          {/* 3- ....*/}
+          <option value="">Selecciona un transporte</option>
+          {transportOptionsFormatted.keys.map((key) => (
+            <option key={key} value={key}>
+              {transportOptionsFormatted.data[key].description} -{" "}
+              {transportOptionsFormatted.data[key].type} {/* Include type here */}
+            </option>
+          ))}
         </select>
 
-        <button
-        // 5- onClick={() => {}}
-        >
-          Limpiar
-        </button>
+        <button onClick={handleClear}>Limpiar</button>
       </div>
-      {/* 4- {selectedOption && <ul>
-        <li>Opcion1: Valor1</li>
-      </ul>} */}
+      {selectedOption && (
+        <div>
+          <h3>{selectedOption}</h3>
+          <p>
+            Description: {transportOptionsFormatted.data[selectedOption].description}
+          </p>
+          <p>
+            Amount: {transportOptionsFormatted.data[selectedOption].amount}
+          </p>
+          <p>
+            Type: {transportOptionsFormatted.data[selectedOption].type}
+          </p>
+        </div>
+      )}
     </div>
   );
 }
